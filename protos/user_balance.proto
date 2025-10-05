@@ -1,0 +1,39 @@
+// ####################################################
+// # Сервис позволяет управлять балансом пользователя #
+// ####################################################
+syntax = "proto3";
+package user_balance;
+
+message User {
+    string user_id = 1; // нумерованные теги
+}
+
+message Balance {
+    double amount = 1;
+}
+
+message UpdateRequest {
+    string user_id = 1;
+    double amount_delta = 2; 
+}
+
+
+message StatusResponse {
+    enum StatusCode {
+        OK = 0;
+        USER_NOT_FOUND = 1;
+        ERROR = 2;
+    }
+
+    StatusCode code = 1;
+    string message = 2;
+    double user_balance = 3;
+}
+
+service UserBalance {
+    // каждый метод должен иметь одну чёткую структуру запроса
+    rpc register_user_balance(User) returns (StatusResponse);
+    rpc get_balance(User) returns (StatusResponse);
+    rpc deposit(UpdateRequest) returns (StatusResponse);
+    rpc withdraw(UpdateRequest) returns (StatusResponse);
+}
