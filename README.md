@@ -9,14 +9,12 @@ Fake online web casino for gRPC talk
 
 ### `front`
 
-Поднять сервис:
-```bash
-cd front \
-npm run dev
-```
-
-Фронт на `Node.js/React/Tailwind` 
+Фронт на `Node.js/React/Tailwind`.
 
 ### `service_balance`
 
-Python сервис для работы с балансом пользователей.
+Python-сервис для работы с балансом пользователей. Каждый пользователь определяется через уникальный `user_id`, который можно получить у сервиса `service_profile`.
+
+### `service_profile`
+
+Python-сервис для регистрации новых пользователей и авторизации старых.

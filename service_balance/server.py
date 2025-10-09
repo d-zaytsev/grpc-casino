@@ -1,13 +1,14 @@
 import grpc
 from concurrent import futures
-import user_balance_pb2_grpc as pb2_grpc
-import user_balance_pb2 as pb2
+import service_balance.user_balance_pb2_grpc as pb2_grpc
+import service_balance.user_balance_pb2 as pb2
 from pathlib import Path
 import threading
 import json
 
 BALANCE_DB = Path("user_balance_db.json")
 LOCK = threading.Lock()  # для потокобезопасного доступа
+SERVICE_CONNECT_DATA = "localhost:5005"
 
 _NOT_FOUND = pb2.StatusResponse.StatusCode.USER_NOT_FOUND
 _ERR = pb2.StatusResponse.StatusCode.ERROR
@@ -22,61 +23,61 @@ class UserBalanceService(pb2_grpc.UserBalanceServicer):
     def register_user_balance(self, request, context):
         data = self._read_db()
 
-        if request.user_id in data:
+        if request.user_uuid in data:
             return pb2.StatusResponse(
-                code=_NOT_FOUND,
-                message=f"User {request.user_id} already exists!",
+                code=_ERR,
+                message=f"User {request.user_uuid} already exists!",
             )
 
-        data[request.user_id] = 0.0
+        data[request.user_uuid] = 0.0
         self._write_db(data)
         return pb2.StatusResponse(code=_OK, message="User registered.")
 
     def get_balance(self, request, context):
         data = self._read_db()
 
-        if request.user_id in data:
+        if request.user_uuid in data:
             return pb2.StatusResponse(
                 code=_OK,
-                user_balance=data[request.user_id],
+                user_balance=data[request.user_uuid],
             )
         else:
             return pb2.StatusResponse(
                 code=_NOT_FOUND,
-                message=f"Can't find user with id '{request.user_id}'.",
+                message=f"Can't find user with id '{request.user_uuid}'.",
             )
 
     def deposit(self, request, context):
         data = self._read_db()
 
-        if request.user_id not in data:
+        if request.user_uuid not in data:
             return pb2.StatusResponse(
                 code=_NOT_FOUND,
-                message=f"Can't find user with id '{request.user_id}'.",
+                message=f"Can't find user with id '{request.user_uuid}'.",
             )
 
-        data[request.user_id] += request.amount_delta
+        data[request.user_uuid] += request.amount_delta
         self._write_db(data)
-        return pb2.StatusResponse(code=_OK, user_balance=data[request.user_id])
+        return pb2.StatusResponse(code=_OK, user_balance=data[request.user_uuid])
 
     def withdraw(self, request, context):
         data = self._read_db()
 
-        if request.user_id not in data:
+        if request.user_uuid not in data:
             return pb2.StatusResponse(
                 code=_NOT_FOUND,
-                message=f"Can't find user with id '{request.user_id}'.",
+                message=f"Can't find user with id '{request.user_uuid}'.",
             )
 
-        if data[request.user_id] < request.amount_delta:
+        if data[request.user_uuid] < request.amount_delta:
             return pb2.StatusResponse(
                 code=_ERR,
-                message=f"Not enough balance for user '{request.user_id}'!",
+                message=f"Not enough balance for user '{request.user_uuid}'!",
             )
 
-        data[request.user_id] -= request.amount_delta
+        data[request.user_uuid] -= request.amount_delta
         self._write_db(data)
-        return pb2.StatusResponse(code=_OK, user_balance=data[request.user_id])
+        return pb2.StatusResponse(code=_OK, user_balance=data[request.user_uuid])
 
     def _read_db(self):
         with LOCK:
@@ -95,7 +96,7 @@ def main():
         futures.ThreadPoolExecutor(max_workers=10)
     )  # 10 потоков на обработку запросов
     pb2_grpc.add_UserBalanceServicer_to_server(service, grpc_server)
-    grpc_server.add_insecure_port("localhost:5005")
+    grpc_server.add_insecure_port(SERVICE_CONNECT_DATA)
 
     grpc_server.start()
     grpc_server.wait_for_termination()

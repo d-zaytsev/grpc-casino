@@ -6,10 +6,10 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class User(_message.Message):
-    __slots__ = ("user_id",)
-    USER_ID_FIELD_NUMBER: _ClassVar[int]
-    user_id: str
-    def __init__(self, user_id: _Optional[str] = ...) -> None: ...
+    __slots__ = ("user_uuid",)
+    USER_UUID_FIELD_NUMBER: _ClassVar[int]
+    user_uuid: str
+    def __init__(self, user_uuid: _Optional[str] = ...) -> None: ...
 
 class Balance(_message.Message):
     __slots__ = ("amount",)
@@ -18,12 +18,12 @@ class Balance(_message.Message):
     def __init__(self, amount: _Optional[float] = ...) -> None: ...
 
 class UpdateRequest(_message.Message):
-    __slots__ = ("user_id", "amount_delta")
-    USER_ID_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("user_uuid", "amount_delta")
+    USER_UUID_FIELD_NUMBER: _ClassVar[int]
     AMOUNT_DELTA_FIELD_NUMBER: _ClassVar[int]
-    user_id: str
+    user_uuid: str
     amount_delta: float
-    def __init__(self, user_id: _Optional[str] = ..., amount_delta: _Optional[float] = ...) -> None: ...
+    def __init__(self, user_uuid: _Optional[str] = ..., amount_delta: _Optional[float] = ...) -> None: ...
 
 class StatusResponse(_message.Message):
     __slots__ = ("code", "message", "user_balance")

@@ -1,6 +1,6 @@
 import grpc
-import user_balance_pb2_grpc as pb2_grpc
-import user_balance_pb2 as pb2
+import service_balance.user_balance_pb2_grpc as pb2_grpc
+import service_balance.user_balance_pb2 as pb2
 
 
 class UserBalanceClient:
@@ -11,51 +11,51 @@ class UserBalanceClient:
         self._channel = grpc.insecure_channel(f"{self._host}:{self._port}")
         self._grpc_stub = pb2_grpc.UserBalanceStub(self._channel)
 
-    def register_user_balance(self, user_id: str) -> bool:
-        response = self._grpc_stub.register_user_balance(pb2.User(user_id=user_id))
+    def register_user_balance(self, user_uuid: str) -> bool:
+        response = self._grpc_stub.register_user_balance(pb2.User(user_uuid=user_uuid))
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
-            print(f"User '{user_id}' registered successfully.")
+            print(f"User '{user_uuid}' registered successfully.")
             return True
         else:
-            print(f"Failed to register user '{user_id}': {response.message}")
+            print(f"Failed to register user '{user_uuid}': {response.message}")
             return False
 
-    def get_balance(self, user_id: str) -> float | None:
-        request = pb2.User(user_id=user_id)
+    def get_balance(self, user_uuid: str) -> float | None:
+        request = pb2.User(user_uuid=user_uuid)
         response = self._grpc_stub.get_balance(request)
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
-            print(f"Balance for user '{user_id}': {response.user_balance}")
+            print(f"Balance for user '{user_uuid}': {response.user_balance}")
             return response.user_balance
         else:
-            print(f"Error fetching balance for '{user_id}': {response.message}")
+            print(f"Error fetching balance for '{user_uuid}': {response.message}")
             return None
 
-    def deposit(self, user_id: str, amount: float) -> float | None:
-        request = pb2.UpdateRequest(user_id=user_id, amount_delta=amount)
+    def deposit(self, user_uuid: str, amount: float) -> float | None:
+        request = pb2.UpdateRequest(user_uuid=user_uuid, amount_delta=amount)
         response = self._grpc_stub.deposit(request)
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
             print(
-                f"Deposited {amount} to '{user_id}'. New balance: {response.user_balance}"
+                f"Deposited {amount} to '{user_uuid}'. New balance: {response.user_balance}"
             )
             return response.user_balance
         else:
-            print(f"Deposit failed for '{user_id}': {response.message}")
+            print(f"Deposit failed for '{user_uuid}': {response.message}")
             return None
 
-    def withdraw(self, user_id: str, amount: float) -> float | None:
-        request = pb2.UpdateRequest(user_id=user_id, amount_delta=amount)
+    def withdraw(self, user_uuid: str, amount: float) -> float | None:
+        request = pb2.UpdateRequest(user_uuid=user_uuid, amount_delta=amount)
         response = self._grpc_stub.withdraw(request)
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
             print(
-                f"Withdrew {amount} from '{user_id}'. New balance: {response.user_balance}"
+                f"Withdrew {amount} from '{user_uuid}'. New balance: {response.user_balance}"
             )
             return response.user_balance
         else:
-            print(f"Withdrawal failed for '{user_id}': {response.message}")
+            print(f"Withdrawal failed for '{user_uuid}': {response.message}")
             return None
 
     def close(self):

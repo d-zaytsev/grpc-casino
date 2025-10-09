@@ -1,0 +1,35 @@
+// ##########################################################
+// # Сервис позволяет получать информацию о пользователях   #
+// # и регистрировать новых                                 #
+// ##########################################################
+syntax = "proto3";
+package user_profile;
+
+message UserLogInfo {
+    string name = 1;
+    string password_hash = 2;
+}
+
+message UserProfileInfo {
+    string name = 1;
+    string password_hash = 2;
+    double balance = 3;
+    string user_uuid = 4;
+}
+
+message StatusResponse {
+    enum StatusCode {
+        OK = 0;
+        USER_NOT_FOUND = 1;
+        ERROR = 2;
+    }
+
+    StatusCode code = 1;
+    string message = 2;
+    UserProfileInfo user_profile = 3;
+}
+
+service UserProfile {
+    rpc register_user(UserLogInfo) returns (StatusResponse);
+    rpc get_user_profile(UserLogInfo) returns (StatusResponse);
+}
