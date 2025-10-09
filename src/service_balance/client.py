@@ -60,9 +60,3 @@ class UserBalanceClient:
 
     def close(self):
         self._channel.close()
-
-
-if __name__ == "__main__":
-    client = UserBalanceClient()
-    result = client.register_user_balance(3)
-    result = client.get_balance(3)
