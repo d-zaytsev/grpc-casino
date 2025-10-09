@@ -12,7 +12,9 @@ class UserProfileClient:
         self._grpc_stub = pb2_grpc.UserProfileStub(self._channel)
 
     def register_user(self, name: str, pass_hash: str) -> tuple[float, str] | None:
-        response = self._grpc_stub.register_user(pb2.UserLogInfo(name=name, password_hash=pass_hash))
+        response = self._grpc_stub.register_user(
+            pb2.UserLogInfo(name=name, password_hash=pass_hash)
+        )
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
             user_uuid = response.user_profile.user_uuid
@@ -23,7 +25,9 @@ class UserProfileClient:
             return None
 
     def get_user_profile(self, name: str, pass_hash: str) -> tuple[float, str] | None:
-        response = self._grpc_stub.get_user_profile(pb2.UserLogInfo(name=name, password_hash=pass_hash))
+        response = self._grpc_stub.get_user_profile(
+            pb2.UserLogInfo(name=name, password_hash=pass_hash)
+        )
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
             return response.user_profile.balance, response.user_profile.user_uuid

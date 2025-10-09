@@ -11,7 +11,7 @@ from service_balance.client import UserBalanceClient
 
 BALANCE_DB = Path("user_profile_db.json")
 LOCK = threading.Lock()  # для потокобезопасного доступа
-SERVICE_CONNECT_DATA = "localhost:5004" 
+SERVICE_CONNECT_DATA = "localhost:5004"
 
 _NOT_FOUND = pb2.StatusResponse.StatusCode.USER_NOT_FOUND
 _ERR = pb2.StatusResponse.StatusCode.ERROR
@@ -46,10 +46,15 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
         balance_service.close()
 
         profile_info = pb2.UserProfileInfo(
-            name=usr_name, password_hash=usr_pass_hash, balance=usr_balance, user_uuid=usr_uuid
+            name=usr_name,
+            password_hash=usr_pass_hash,
+            balance=usr_balance,
+            user_uuid=usr_uuid,
         )
 
-        print(f"USER PROFILE SERVER: new user registered. Name: {usr_name} uuid: {usr_uuid}")
+        print(
+            f"USER PROFILE SERVER: new user registered. Name: {usr_name} uuid: {usr_uuid}"
+        )
         return pb2.StatusResponse(
             code=_OK, message="User registered.", user_profile=profile_info
         )
@@ -73,9 +78,14 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
         usr_balance = balance_service.get_balance(usr_uuid)
         balance_service.close()
 
-        print(f"USER PROFILE SERVER: fetch user data. Name: {usr_name} uuid: {usr_uuid} balance: {usr_balance}")
+        print(
+            f"USER PROFILE SERVER: fetch user data. Name: {usr_name} uuid: {usr_uuid} balance: {usr_balance}"
+        )
         profile_info = pb2.UserProfileInfo(
-            name=usr_name, password_hash=usr_pass_hash, balance=usr_balance, user_uuid=usr_uuid
+            name=usr_name,
+            password_hash=usr_pass_hash,
+            balance=usr_balance,
+            user_uuid=usr_uuid,
         )
 
         return pb2.StatusResponse(
@@ -98,9 +108,7 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
 
 def main():
     service = UserProfileServer()
-    grpc_server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10)
-    )
+    grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UserProfileServicer_to_server(service, grpc_server)
     grpc_server.add_insecure_port(SERVICE_CONNECT_DATA)
 

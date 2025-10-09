@@ -4,43 +4,40 @@
 # source: user_balance.proto
 # Protobuf Python Version: 6.31.1
 """Generated protocol buffer code."""
+
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 _runtime_version.ValidateProtobufRuntimeVersion(
-    _runtime_version.Domain.PUBLIC,
-    6,
-    31,
-    1,
-    '',
-    'user_balance.proto'
+    _runtime_version.Domain.PUBLIC, 6, 31, 1, "", "user_balance.proto"
 )
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12user_balance.proto\x12\x0cuser_balance\"\x19\n\x04User\x12\x11\n\tuser_uuid\x18\x01 \x01(\t\"\x19\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x01\"8\n\rUpdateRequest\x12\x11\n\tuser_uuid\x18\x01 \x01(\t\x12\x14\n\x0c\x61mount_delta\x18\x02 \x01(\x01\"\xa3\x01\n\x0eStatusResponse\x12\x35\n\x04\x63ode\x18\x01 \x01(\x0e\x32\'.user_balance.StatusResponse.StatusCode\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x14\n\x0cuser_balance\x18\x03 \x01(\x01\"3\n\nStatusCode\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0eUSER_NOT_FOUND\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x32\xa6\x02\n\x0bUserBalance\x12I\n\x15register_user_balance\x12\x12.user_balance.User\x1a\x1c.user_balance.StatusResponse\x12?\n\x0bget_balance\x12\x12.user_balance.User\x1a\x1c.user_balance.StatusResponse\x12\x44\n\x07\x64\x65posit\x12\x1b.user_balance.UpdateRequest\x1a\x1c.user_balance.StatusResponse\x12\x45\n\x08withdraw\x12\x1b.user_balance.UpdateRequest\x1a\x1c.user_balance.StatusResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x12user_balance.proto\x12\x0cuser_balance"\x19\n\x04User\x12\x11\n\tuser_uuid\x18\x01 \x01(\t"\x19\n\x07\x42\x61lance\x12\x0e\n\x06\x61mount\x18\x01 \x01(\x01"8\n\rUpdateRequest\x12\x11\n\tuser_uuid\x18\x01 \x01(\t\x12\x14\n\x0c\x61mount_delta\x18\x02 \x01(\x01"\xa3\x01\n\x0eStatusResponse\x12\x35\n\x04\x63ode\x18\x01 \x01(\x0e\x32\'.user_balance.StatusResponse.StatusCode\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x14\n\x0cuser_balance\x18\x03 \x01(\x01"3\n\nStatusCode\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0eUSER_NOT_FOUND\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x32\xa6\x02\n\x0bUserBalance\x12I\n\x15register_user_balance\x12\x12.user_balance.User\x1a\x1c.user_balance.StatusResponse\x12?\n\x0bget_balance\x12\x12.user_balance.User\x1a\x1c.user_balance.StatusResponse\x12\x44\n\x07\x64\x65posit\x12\x1b.user_balance.UpdateRequest\x1a\x1c.user_balance.StatusResponse\x12\x45\n\x08withdraw\x12\x1b.user_balance.UpdateRequest\x1a\x1c.user_balance.StatusResponseb\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_balance_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "user_balance_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_USER']._serialized_start=36
-  _globals['_USER']._serialized_end=61
-  _globals['_BALANCE']._serialized_start=63
-  _globals['_BALANCE']._serialized_end=88
-  _globals['_UPDATEREQUEST']._serialized_start=90
-  _globals['_UPDATEREQUEST']._serialized_end=146
-  _globals['_STATUSRESPONSE']._serialized_start=149
-  _globals['_STATUSRESPONSE']._serialized_end=312
-  _globals['_STATUSRESPONSE_STATUSCODE']._serialized_start=261
-  _globals['_STATUSRESPONSE_STATUSCODE']._serialized_end=312
-  _globals['_USERBALANCE']._serialized_start=315
-  _globals['_USERBALANCE']._serialized_end=609
+    DESCRIPTOR._loaded_options = None
+    _globals["_USER"]._serialized_start = 36
+    _globals["_USER"]._serialized_end = 61
+    _globals["_BALANCE"]._serialized_start = 63
+    _globals["_BALANCE"]._serialized_end = 88
+    _globals["_UPDATEREQUEST"]._serialized_start = 90
+    _globals["_UPDATEREQUEST"]._serialized_end = 146
+    _globals["_STATUSRESPONSE"]._serialized_start = 149
+    _globals["_STATUSRESPONSE"]._serialized_end = 312
+    _globals["_STATUSRESPONSE_STATUSCODE"]._serialized_start = 261
+    _globals["_STATUSRESPONSE_STATUSCODE"]._serialized_end = 312
+    _globals["_USERBALANCE"]._serialized_start = 315
+    _globals["_USERBALANCE"]._serialized_end = 609
 # @@protoc_insertion_point(module_scope)

@@ -23,7 +23,9 @@ class UpdateRequest(_message.Message):
     AMOUNT_DELTA_FIELD_NUMBER: _ClassVar[int]
     user_uuid: str
     amount_delta: float
-    def __init__(self, user_uuid: _Optional[str] = ..., amount_delta: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self, user_uuid: _Optional[str] = ..., amount_delta: _Optional[float] = ...
+    ) -> None: ...
 
 class StatusResponse(_message.Message):
     __slots__ = ("code", "message", "user_balance")
@@ -32,6 +34,7 @@ class StatusResponse(_message.Message):
         OK: _ClassVar[StatusResponse.StatusCode]
         USER_NOT_FOUND: _ClassVar[StatusResponse.StatusCode]
         ERROR: _ClassVar[StatusResponse.StatusCode]
+
     OK: StatusResponse.StatusCode
     USER_NOT_FOUND: StatusResponse.StatusCode
     ERROR: StatusResponse.StatusCode
@@ -41,4 +44,9 @@ class StatusResponse(_message.Message):
     code: StatusResponse.StatusCode
     message: str
     user_balance: float
-    def __init__(self, code: _Optional[_Union[StatusResponse.StatusCode, str]] = ..., message: _Optional[str] = ..., user_balance: _Optional[float] = ...) -> None: ...
+    def __init__(
+        self,
+        code: _Optional[_Union[StatusResponse.StatusCode, str]] = ...,
+        message: _Optional[str] = ...,
+        user_balance: _Optional[float] = ...,
+    ) -> None: ...

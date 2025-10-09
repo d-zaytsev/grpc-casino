@@ -4,41 +4,38 @@
 # source: user_profile.proto
 # Protobuf Python Version: 6.31.1
 """Generated protocol buffer code."""
+
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 _runtime_version.ValidateProtobufRuntimeVersion(
-    _runtime_version.Domain.PUBLIC,
-    6,
-    31,
-    1,
-    '',
-    'user_profile.proto'
+    _runtime_version.Domain.PUBLIC, 6, 31, 1, "", "user_profile.proto"
 )
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12user_profile.proto\x12\x0cuser_profile\"2\n\x0bUserLogInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rpassword_hash\x18\x02 \x01(\t\"Z\n\x0fUserProfileInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rpassword_hash\x18\x02 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x03 \x01(\x01\x12\x11\n\tuser_uuid\x18\x04 \x01(\t\"\xc2\x01\n\x0eStatusResponse\x12\x35\n\x04\x63ode\x18\x01 \x01(\x0e\x32\'.user_profile.StatusResponse.StatusCode\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x33\n\x0cuser_profile\x18\x03 \x01(\x0b\x32\x1d.user_profile.UserProfileInfo\"3\n\nStatusCode\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0eUSER_NOT_FOUND\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x32\xa4\x01\n\x0bUserProfile\x12H\n\rregister_user\x12\x19.user_profile.UserLogInfo\x1a\x1c.user_profile.StatusResponse\x12K\n\x10get_user_profile\x12\x19.user_profile.UserLogInfo\x1a\x1c.user_profile.StatusResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x12user_profile.proto\x12\x0cuser_profile"2\n\x0bUserLogInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rpassword_hash\x18\x02 \x01(\t"Z\n\x0fUserProfileInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\rpassword_hash\x18\x02 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x03 \x01(\x01\x12\x11\n\tuser_uuid\x18\x04 \x01(\t"\xc2\x01\n\x0eStatusResponse\x12\x35\n\x04\x63ode\x18\x01 \x01(\x0e\x32\'.user_profile.StatusResponse.StatusCode\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x33\n\x0cuser_profile\x18\x03 \x01(\x0b\x32\x1d.user_profile.UserProfileInfo"3\n\nStatusCode\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0eUSER_NOT_FOUND\x10\x01\x12\t\n\x05\x45RROR\x10\x02\x32\xa4\x01\n\x0bUserProfile\x12H\n\rregister_user\x12\x19.user_profile.UserLogInfo\x1a\x1c.user_profile.StatusResponse\x12K\n\x10get_user_profile\x12\x19.user_profile.UserLogInfo\x1a\x1c.user_profile.StatusResponseb\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_profile_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "user_profile_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_USERLOGINFO']._serialized_start=36
-  _globals['_USERLOGINFO']._serialized_end=86
-  _globals['_USERPROFILEINFO']._serialized_start=88
-  _globals['_USERPROFILEINFO']._serialized_end=178
-  _globals['_STATUSRESPONSE']._serialized_start=181
-  _globals['_STATUSRESPONSE']._serialized_end=375
-  _globals['_STATUSRESPONSE_STATUSCODE']._serialized_start=324
-  _globals['_STATUSRESPONSE_STATUSCODE']._serialized_end=375
-  _globals['_USERPROFILE']._serialized_start=378
-  _globals['_USERPROFILE']._serialized_end=542
+    DESCRIPTOR._loaded_options = None
+    _globals["_USERLOGINFO"]._serialized_start = 36
+    _globals["_USERLOGINFO"]._serialized_end = 86
+    _globals["_USERPROFILEINFO"]._serialized_start = 88
+    _globals["_USERPROFILEINFO"]._serialized_end = 178
+    _globals["_STATUSRESPONSE"]._serialized_start = 181
+    _globals["_STATUSRESPONSE"]._serialized_end = 375
+    _globals["_STATUSRESPONSE_STATUSCODE"]._serialized_start = 324
+    _globals["_STATUSRESPONSE_STATUSCODE"]._serialized_end = 375
+    _globals["_USERPROFILE"]._serialized_start = 378
+    _globals["_USERPROFILE"]._serialized_end = 542
 # @@protoc_insertion_point(module_scope)

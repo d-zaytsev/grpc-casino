@@ -12,7 +12,9 @@ class UserLogInfo(_message.Message):
     PASSWORD_HASH_FIELD_NUMBER: _ClassVar[int]
     name: str
     password_hash: str
-    def __init__(self, name: _Optional[str] = ..., password_hash: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self, name: _Optional[str] = ..., password_hash: _Optional[str] = ...
+    ) -> None: ...
 
 class UserProfileInfo(_message.Message):
     __slots__ = ("name", "password_hash", "balance", "user_uuid")
@@ -24,7 +26,13 @@ class UserProfileInfo(_message.Message):
     password_hash: str
     balance: float
     user_uuid: str
-    def __init__(self, name: _Optional[str] = ..., password_hash: _Optional[str] = ..., balance: _Optional[float] = ..., user_uuid: _Optional[str] = ...) -> None: ...
+    def __init__(
+        self,
+        name: _Optional[str] = ...,
+        password_hash: _Optional[str] = ...,
+        balance: _Optional[float] = ...,
+        user_uuid: _Optional[str] = ...,
+    ) -> None: ...
 
 class StatusResponse(_message.Message):
     __slots__ = ("code", "message", "user_profile")
@@ -33,6 +41,7 @@ class StatusResponse(_message.Message):
         OK: _ClassVar[StatusResponse.StatusCode]
         USER_NOT_FOUND: _ClassVar[StatusResponse.StatusCode]
         ERROR: _ClassVar[StatusResponse.StatusCode]
+
     OK: StatusResponse.StatusCode
     USER_NOT_FOUND: StatusResponse.StatusCode
     ERROR: StatusResponse.StatusCode
@@ -42,4 +51,9 @@ class StatusResponse(_message.Message):
     code: StatusResponse.StatusCode
     message: str
     user_profile: UserProfileInfo
-    def __init__(self, code: _Optional[_Union[StatusResponse.StatusCode, str]] = ..., message: _Optional[str] = ..., user_profile: _Optional[_Union[UserProfileInfo, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        code: _Optional[_Union[StatusResponse.StatusCode, str]] = ...,
+        message: _Optional[str] = ...,
+        user_profile: _Optional[_Union[UserProfileInfo, _Mapping]] = ...,
+    ) -> None: ...
