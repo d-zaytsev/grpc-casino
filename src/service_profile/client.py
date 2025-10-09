@@ -18,7 +18,7 @@ class UserProfileClient:
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
             user_uuid = response.user_profile.user_uuid
-            print(f"User '{name}' registered successfully as {user_uuid}.")
+            print(f"User '{name}' registered successfully as '{user_uuid}'.")
             return response.user_profile.balance, user_uuid
         else:
             print(f"Failed to register user '{name}': {response.message}")
@@ -30,8 +30,10 @@ class UserProfileClient:
         )
 
         if response.code == pb2.StatusResponse.StatusCode.OK:
+            print(f"Get user '{name}' profile!")
             return response.user_profile.balance, response.user_profile.user_uuid
         else:
+            print(f"Failed to get user '{name}': {response.message}")
             return None
 
     def close(self):

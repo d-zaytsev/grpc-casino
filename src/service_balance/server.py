@@ -5,9 +5,10 @@ import service_balance.user_balance_pb2 as pb2
 from pathlib import Path
 import threading
 import json
+from json import JSONDecodeError
 
 BALANCE_DB = Path("user_balance_db.json")
-LOCK = threading.Lock()  # для потокобезопасного доступа
+LOCK = threading.Lock()
 SERVICE_CONNECT_DATA = "localhost:5005"
 
 _NOT_FOUND = pb2.StatusResponse.StatusCode.USER_NOT_FOUND
@@ -21,7 +22,10 @@ class UserBalanceService(pb2_grpc.UserBalanceServicer):
             BALANCE_DB.write_text("{}")
 
     def register_user_balance(self, request, context):
-        data = self._read_db()
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
 
         if request.user_uuid in data:
             return pb2.StatusResponse(
@@ -30,25 +34,19 @@ class UserBalanceService(pb2_grpc.UserBalanceServicer):
             )
 
         data[request.user_uuid] = 0.0
-        self._write_db(data)
+
+        try:
+            self._write_db(data)
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to write DB: {e}")
+
         return pb2.StatusResponse(code=_OK, message="User registered.")
 
     def get_balance(self, request, context):
-        data = self._read_db()
-
-        if request.user_uuid in data:
-            return pb2.StatusResponse(
-                code=_OK,
-                user_balance=data[request.user_uuid],
-            )
-        else:
-            return pb2.StatusResponse(
-                code=_NOT_FOUND,
-                message=f"Can't find user with id '{request.user_uuid}'.",
-            )
-
-    def deposit(self, request, context):
-        data = self._read_db()
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
 
         if request.user_uuid not in data:
             return pb2.StatusResponse(
@@ -56,12 +54,35 @@ class UserBalanceService(pb2_grpc.UserBalanceServicer):
                 message=f"Can't find user with id '{request.user_uuid}'.",
             )
 
-        data[request.user_uuid] += request.amount_delta
-        self._write_db(data)
+        balance = data[request.user_uuid]
+        return pb2.StatusResponse(code=_OK, user_balance=balance)
+
+    def deposit(self, request, context):
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
+
+        if request.user_uuid not in data:
+            return pb2.StatusResponse(
+                code=_NOT_FOUND,
+                message=f"Can't find user with id '{request.user_uuid}'.",
+            )
+
+        try:
+            amount = float(request.amount_delta)
+            data[request.user_uuid] += amount
+            self._write_db(data)
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Write failed: {e}")
+
         return pb2.StatusResponse(code=_OK, user_balance=data[request.user_uuid])
 
     def withdraw(self, request, context):
-        data = self._read_db()
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
 
         if request.user_uuid not in data:
             return pb2.StatusResponse(
@@ -69,35 +90,50 @@ class UserBalanceService(pb2_grpc.UserBalanceServicer):
                 message=f"Can't find user with id '{request.user_uuid}'.",
             )
 
-        if data[request.user_uuid] < request.amount_delta:
+        current_balance = data[request.user_uuid]
+        amount = float(request.amount_delta)
+
+        if current_balance < amount:
             return pb2.StatusResponse(
                 code=_ERR,
-                message=f"Not enough balance for user '{request.user_uuid}'!",
+                message=f"Not enough balance for user '{request.user_uuid}'! "
+                f"Current: {current_balance}, requested: {amount}",
             )
 
-        data[request.user_uuid] -= request.amount_delta
-        self._write_db(data)
+        data[request.user_uuid] -= amount
+
+        try:
+            self._write_db(data)
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Write failed: {e}")
+
         return pb2.StatusResponse(code=_OK, user_balance=data[request.user_uuid])
 
-    def _read_db(self):
+    def _read_db(self) -> dict:
         with LOCK:
-            with BALANCE_DB.open("r") as f:
-                return json.load(f)
+            try:
+                with BALANCE_DB.open("r") as f:
+                    return json.load(f)
+            except (FileNotFoundError, JSONDecodeError):
+                BALANCE_DB.write_text("{}")
+                return {}
+            except Exception as e:
+                raise RuntimeError(f"DB read error: {e}")
 
-    def _write_db(self, data):
+    def _write_db(self, data: dict):
         with LOCK:
-            with BALANCE_DB.open("w") as f:
-                json.dump(data, f)
+            try:
+                with BALANCE_DB.open("w") as f:
+                    json.dump(data, f)
+            except Exception as e:
+                raise RuntimeError(f"DB write error: {e}")
 
 
 def main():
     service = UserBalanceService()
-    grpc_server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10)
-    )  # 10 потоков на обработку запросов
+    grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UserBalanceServicer_to_server(service, grpc_server)
     grpc_server.add_insecure_port(SERVICE_CONNECT_DATA)
-
     grpc_server.start()
     grpc_server.wait_for_termination()
 

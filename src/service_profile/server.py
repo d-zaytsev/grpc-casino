@@ -7,10 +7,10 @@ from concurrent import futures
 import json
 import uuid
 from service_balance.client import UserBalanceClient
-
+from json import JSONDecodeError
 
 BALANCE_DB = Path("user_profile_db.json")
-LOCK = threading.Lock()  # для потокобезопасного доступа
+LOCK = threading.Lock()
 SERVICE_CONNECT_DATA = "localhost:5004"
 
 _NOT_FOUND = pb2.StatusResponse.StatusCode.USER_NOT_FOUND
@@ -24,10 +24,13 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
             BALANCE_DB.write_text("{}")
 
     def register_user(self, request, context):
-        data = self._read_db()
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
 
         usr_name = request.name
-        usr_pass_hash: str = request.password_hash
+        usr_pass_hash = request.password_hash
 
         if usr_name in data:
             return pb2.StatusResponse(
@@ -35,15 +38,29 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
                 message=f"User {usr_name} already exists!",
             )
 
-        usr_uuid: str = str(uuid.uuid4())
+        usr_uuid = str(uuid.uuid4())
+        data[usr_name] = {"uuid": usr_uuid, "hash": usr_pass_hash}
 
-        data[usr_name] = usr_uuid
-        self._write_db(data)
+        try:
+            self._write_db(data)
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to write DB: {e}")
 
-        balance_service = UserBalanceClient()
-        balance_service.register_user_balance(usr_uuid)
-        usr_balance = balance_service.get_balance(usr_uuid)
-        balance_service.close()
+        try:
+            balance_service = UserBalanceClient()
+            balance_service.register_user_balance(usr_uuid)
+            usr_balance = balance_service.get_balance(usr_uuid)
+        except grpc.RpcError as rpc_err:
+            return pb2.StatusResponse(
+                code=_ERR, message=f"Balance service RPC error: {rpc_err.details()}"
+            )
+        except Exception as e:
+            return pb2.StatusResponse(
+                code=_ERR, message=f"Unexpected balance service error: {e}"
+            )
+        finally:
+            if "balance_service" in locals():
+                balance_service.close()
 
         profile_info = pb2.UserProfileInfo(
             name=usr_name,
@@ -52,18 +69,18 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
             user_uuid=usr_uuid,
         )
 
-        print(
-            f"USER PROFILE SERVER: new user registered. Name: {usr_name} uuid: {usr_uuid}"
-        )
         return pb2.StatusResponse(
             code=_OK, message="User registered.", user_profile=profile_info
         )
 
     def get_user_profile(self, request, context):
-        data = self._read_db()
+        try:
+            data = self._read_db()
+        except Exception as e:
+            return pb2.StatusResponse(code=_ERR, message=f"Failed to read DB: {e}")
 
         usr_name = request.name
-        usr_pass_hash: str = request.password_hash
+        usr_pass_hash = request.password_hash
 
         if usr_name not in data:
             return pb2.StatusResponse(
@@ -71,16 +88,30 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
                 message=f"User {usr_name} doesn't exist!",
             )
 
-        usr_uuid = data[usr_name]
+        usr_data = data[usr_name]
+        usr_uuid = usr_data["uuid"]
 
-        balance_service = UserBalanceClient()
-        balance_service.get_balance(usr_uuid)
-        usr_balance = balance_service.get_balance(usr_uuid)
-        balance_service.close()
+        if usr_pass_hash != usr_data["hash"]:
+            return pb2.StatusResponse(
+                code=_ERR,
+                message=f"Incorrect password for user {usr_name}!",
+            )
 
-        print(
-            f"USER PROFILE SERVER: fetch user data. Name: {usr_name} uuid: {usr_uuid} balance: {usr_balance}"
-        )
+        try:
+            balance_service = UserBalanceClient()
+            usr_balance = balance_service.get_balance(usr_uuid)
+        except grpc.RpcError as rpc_err:
+            return pb2.StatusResponse(
+                code=_ERR, message=f"Balance service RPC error: {rpc_err.details()}"
+            )
+        except Exception as e:
+            return pb2.StatusResponse(
+                code=_ERR, message=f"Unexpected balance service error: {e}"
+            )
+        finally:
+            if "balance_service" in locals():
+                balance_service.close()
+
         profile_info = pb2.UserProfileInfo(
             name=usr_name,
             password_hash=usr_pass_hash,
@@ -92,18 +123,24 @@ class UserProfileServer(pb2_grpc.UserProfileServicer):
             code=_OK, message="Here is your user's info!", user_profile=profile_info
         )
 
-    def _read_db(self) -> dict[tuple[str, str], str]:
-        try:
-            with LOCK:
+    def _read_db(self) -> dict:
+        with LOCK:
+            try:
                 with BALANCE_DB.open("r") as f:
                     return json.load(f)
-        except:  # noqa: E722
-            return {}
+            except (FileNotFoundError, JSONDecodeError):
+                BALANCE_DB.write_text("{}")
+                return {}
+            except Exception as e:
+                raise RuntimeError(f"DB read error: {e}")
 
     def _write_db(self, data):
         with LOCK:
-            with BALANCE_DB.open("w") as f:
-                json.dump(data, f)
+            try:
+                with BALANCE_DB.open("w") as f:
+                    json.dump(data, f)
+            except Exception as e:
+                raise RuntimeError(f"DB write error: {e}")
 
 
 def main():
@@ -111,7 +148,6 @@ def main():
     grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_UserProfileServicer_to_server(service, grpc_server)
     grpc_server.add_insecure_port(SERVICE_CONNECT_DATA)
-
     grpc_server.start()
     grpc_server.wait_for_termination()
 
