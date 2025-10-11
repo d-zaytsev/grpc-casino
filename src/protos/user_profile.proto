@@ -17,6 +17,13 @@ message UserProfileInfo {
     string user_uuid = 4;
 }
 
+message UserDepositRequest {
+    string name = 1;
+    string password_hash = 2;
+    double amount = 3;
+    string user_uuid = 4;
+}
+
 message StatusResponse {
     enum StatusCode {
         OK = 0;
@@ -32,4 +39,5 @@ message StatusResponse {
 service UserProfile {
     rpc register_user(UserLogInfo) returns (StatusResponse);
     rpc get_user_profile(UserLogInfo) returns (StatusResponse);
+    rpc deposit(UserDepositRequest) returns (StatusResponse);
 }

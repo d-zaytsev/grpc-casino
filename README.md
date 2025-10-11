@@ -3,13 +3,17 @@ Fake online web casino for gRPC talk
 
 ## Структура проекта
 
-### `protos`
+### `/protos`
 
 Все сервисы взаимодействуют по `gRPC`. В этом каталоге находятся все `.proto` файлы для них.
 
 ### `front`
 
-Фронт на `Node.js/React/Tailwind`.
+Фронт написал на `Node.js/React/Tailwind`. Для общения с сервисами по `gRPC` используется [gRPC web](https://github.com/grpc/grpc-web) и прокси [envoy](https://www.envoyproxy.io/). Прокси выступает в качестве переводчика с `gRPC-web` на `gRPC`, так как обычный `gRPC` слишком низкоуровневый для браузеров.
+
+```
+[Browser JS] --(gRPC-Web)--> [Envoy proxy] --(gRPC)--> [Backend server]
+```
 
 ### `service_balance`
 

@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Json database
-*.json
+*db.json
 
 # C extensions
 *.so
