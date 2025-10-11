@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-export default function LoginModal({ isOpen, onClose, onLogin }) {
+export default function LoginModal({ isOpen, onClose, onLogin, onRegister }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
@@ -12,7 +12,12 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (username && password) {
-      onLogin(username, password)
+      if (isRegister) {
+        setIsRegister(false);
+        onRegister?.(username, password);
+      } else {
+        onLogin?.(username, password);
+      }
       setUsername('')
       setPassword('')
     }
@@ -26,6 +31,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
         >
+          ✕
         </button>
 
         {/* Заголовок */}
@@ -43,7 +49,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
               placeholder="Введите логин"
               required
             />
@@ -57,7 +63,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 py-3 border border-gray-300 text-black rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
               placeholder="Введите пароль"
               required
             />
@@ -77,7 +83,9 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
             onClick={() => setIsRegister(!isRegister)}
             className="text-purple-600 hover:text-purple-700 font-medium"
           >
-            {isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
+            {isRegister
+              ? 'Уже есть аккаунт? Войти'
+              : 'Нет аккаунта? Зарегистрироваться'}
           </button>
         </div>
       </div>

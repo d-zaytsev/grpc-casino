@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import LoginModal from './components/LoginModal.jsx'
+import { getUserProfile, registerUser } from '../grpc/client.js';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -9,10 +10,31 @@ export default function Home() {
   const [username, setUsername] = useState("-")
 
   const handleLogin = (username, password) => {
-    // TODO: логика входа
-    setUsername(username)
-    setIsLoggedIn(true)
-    setIsModalOpen(false)
+    getUserProfile(username, password, (err, resp) => {
+      if (err) {
+        console.error('Ошибка авторизации:', err.message);
+        setIsLoggedIn(false);
+      } else {
+            setIsLoggedIn(true);
+            setUsername(username);
+      }
+    });
+
+    setIsModalOpen(false);
+  }
+
+  const handelRegister = (username, password) => {
+    registerUser(username, password, (err, resp) => {
+      if (err) {
+        console.error('Ошибка регистрации:', err.message);
+        setIsLoggedIn(false);
+      } else {
+            setIsLoggedIn(true);
+            setUsername(username);
+      }
+    });
+
+    setIsModalOpen(false);
   }
 
   const handleLogout = () => {
@@ -44,7 +66,7 @@ export default function Home() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center text-white">
           <h1 className="text-6xl font-bold mb-4 drop-shadow-lg">
-             Добро пожаловать
+             Добро пожаловать в «DADEP Casino»
           </h1>
           <p className="text-xl opacity-90">
             {isLoggedIn ? `Привет, ${username}!` : 'Войдите, чтобы продолжить'}
@@ -57,6 +79,7 @@ export default function Home() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onLogin={handleLogin}
+        onRegister={handelRegister}
       />
     </div>
   )

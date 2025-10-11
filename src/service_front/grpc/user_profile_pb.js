@@ -1,19 +1,16 @@
-// source: protos/user_profile.proto
+// source: user_profile.proto
 /**
  * @fileoverview
  * @enhanceable
- * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
-/* eslint-disable */
-// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = globalThis;
+var global = Function('return this')();
 
 goog.exportSymbol('proto.user_profile.StatusResponse', null, global);
 goog.exportSymbol('proto.user_profile.StatusResponse.StatusCode', null, global);
@@ -114,8 +111,8 @@ proto.user_profile.UserLogInfo.prototype.toObject = function(opt_includeInstance
  */
 proto.user_profile.UserLogInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
-name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-passwordHash: jspb.Message.getFieldWithDefault(msg, 2, "")
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    passwordHash: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -153,11 +150,11 @@ proto.user_profile.UserLogInfo.deserializeBinaryFromReader = function(msg, reade
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setPasswordHash(value);
       break;
     default:
@@ -274,10 +271,10 @@ proto.user_profile.UserProfileInfo.prototype.toObject = function(opt_includeInst
  */
 proto.user_profile.UserProfileInfo.toObject = function(includeInstance, msg) {
   var f, obj = {
-name: jspb.Message.getFieldWithDefault(msg, 1, ""),
-passwordHash: jspb.Message.getFieldWithDefault(msg, 2, ""),
-balance: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
-userUuid: jspb.Message.getFieldWithDefault(msg, 4, "")
+    name: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    passwordHash: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    balance: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
+    userUuid: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -315,11 +312,11 @@ proto.user_profile.UserProfileInfo.deserializeBinaryFromReader = function(msg, r
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setPasswordHash(value);
       break;
     case 3:
@@ -327,7 +324,7 @@ proto.user_profile.UserProfileInfo.deserializeBinaryFromReader = function(msg, r
       msg.setBalance(value);
       break;
     case 4:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setUserUuid(value);
       break;
     default:
@@ -494,9 +491,9 @@ proto.user_profile.StatusResponse.prototype.toObject = function(opt_includeInsta
  */
 proto.user_profile.StatusResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-code: jspb.Message.getFieldWithDefault(msg, 1, 0),
-message: jspb.Message.getFieldWithDefault(msg, 2, ""),
-userProfile: (f = msg.getUserProfile()) && proto.user_profile.UserProfileInfo.toObject(includeInstance, f)
+    code: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    message: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    userProfile: (f = msg.getUserProfile()) && proto.user_profile.UserProfileInfo.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -538,7 +535,7 @@ proto.user_profile.StatusResponse.deserializeBinaryFromReader = function(msg, re
       msg.setCode(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readStringRequireUtf8());
+      var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
     case 3:

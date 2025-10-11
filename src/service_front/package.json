@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "webpack grpc/client.js && next build --turbopack",
     "start": "next start"
   },
   "dependencies": {
+    "grpc-web": "^2.0.2",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -17,11 +18,7 @@
     "@grpc/proto-loader": "~0.5.4",
     "@tailwindcss/postcss": "^4",
     "async": "~1.5.2",
-    "google-protobuf": "~3.21.4",
-    "grpc-web": "~2.0.2",
     "lodash": "~4.17.0",
-    "tailwindcss": "^4",
-    "webpack": "^5.102.1",
-    "webpack-cli": "~5.1.1"
+    "tailwindcss": "^4"
   }
 }
