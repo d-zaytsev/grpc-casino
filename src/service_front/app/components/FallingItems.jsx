@@ -31,7 +31,7 @@ export default function FallingItems() {
       setTimeout(() => {
         setItems(prev => prev.filter(c => c.id !== id));
       }, newItem.duration * 1000);
-    }, 300);
+    }, 400);
 
     return () => clearInterval(interval);
   }, []);
