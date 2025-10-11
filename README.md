@@ -1,6 +1,15 @@
 # grpc-casino
 Fake online web casino for gRPC talk
 
+## Как запускать
+
+**Для фронта:**
+1. `envoy -c envoy.yaml` (прокси)
+2. `npm run dev`
+
+**Для сервисов:**
+- `PYTHONPATH=. python3 service_X/server.py`
+
 ## Структура проекта
 
 ### `/protos`
@@ -22,3 +31,7 @@ Python-сервис для работы с балансом пользовате
 ### `service_profile`
 
 Python-сервис для регистрации новых пользователей и авторизации старых.
+
+### `service_transaction`
+
+Python-сервер для проверки денежных транзакций пользователя (фронта). Когда проверка выполнена, обращается к `service_balance`.
