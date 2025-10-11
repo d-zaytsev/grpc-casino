@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import LoginModal from './components/LoginModal.jsx'
+import FallingItems from './components/FallingItems.jsx';
 import { getUserProfile, registerUser } from '../grpc/client.js';
 
 export default function Home() {
@@ -43,6 +44,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+      <FallingItems />  {/* Рофло эффект */}
       {/* Кнопка Выхода/Входа */}
       <div className="fixed top-6 right-6 z-10">
         {isLoggedIn ? (
