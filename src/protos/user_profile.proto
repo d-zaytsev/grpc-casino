@@ -39,5 +39,4 @@ message StatusResponse {
 service UserProfile {
     rpc register_user(UserLogInfo) returns (StatusResponse);
     rpc get_user_profile(UserLogInfo) returns (StatusResponse);
-    rpc deposit(UserDepositRequest) returns (StatusResponse);
 }

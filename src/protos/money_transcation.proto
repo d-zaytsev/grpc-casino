@@ -9,10 +9,9 @@ message UserDepositRequest {
     string name = 1;
     string password_hash = 2;
     double amount = 3;
-    string user_uuid = 4;
 }
 
-message StatusResponse {
+message TransactionResponse {
     enum StatusCode {
         OK = 0;
         USER_NOT_FOUND = 1;
@@ -24,6 +23,6 @@ message StatusResponse {
 }
 
 service MoneyTransacton {
-    rpc deposit(UserDepositRequest) returns (StatusResponse);
-    rpc withdraw(UserDepositRequest) returns (StatusResponse);
+    rpc deposit(UserDepositRequest) returns (TransactionResponse);
+    rpc withdraw(UserDepositRequest) returns (TransactionResponse);
 }

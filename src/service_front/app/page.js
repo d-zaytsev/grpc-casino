@@ -4,13 +4,15 @@ import { useState } from 'react'
 import LoginModal from './components/LoginModal.jsx'
 import FallingItems from './components/FallingItems.jsx';
 import DepositModal from './components/DepositModal.jsx';
-import { getUserProfile, registerUser } from '../grpc/client.js';
+import { getUserProfile, registerUser } from '../grpc/user_profile_client.js';
+import { deposit } from '../grpc/money_transaction_client.js';
 
 export default function Home() {
   const [isLoginModalOpen, setIsLogModalOpen] = useState(false)
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [userbalance, setUserBalance] = useState("0")
 
   const handleLogin = (username, password) => {
@@ -21,6 +23,7 @@ export default function Home() {
       } else {
         setIsLoggedIn(true);
         setUsername(username);
+        setPassword(password);
         setUserBalance(resp.u[2][2]);
       }
     });
@@ -104,7 +107,14 @@ export default function Home() {
       <DepositModal
         isOpen={isDepositModalOpen}
         onClose={() => setIsDepositModalOpen(false)}
-        onDeposit={(amount) => setIsDepositModalOpen(false)}
+        onDeposit={(amount) => deposit(username, password, amount, (err, resp) => {
+          if (err) {
+            console.error('Ошибка депозита:', err.message);
+            setIsLoggedIn(false);
+          } else {
+                setUserBalance(userbalance + amount);
+                setIsDepositModalOpen(false);
+          }})}
       />
     </div>
   )

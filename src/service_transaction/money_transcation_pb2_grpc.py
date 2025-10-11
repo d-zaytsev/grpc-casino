@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import service_transaction.money_transcation_pb2 as money__transcation__pb2
+import money_transcation_pb2 as money__transcation__pb2
 
 GRPC_GENERATED_VERSION = '1.75.1'
 GRPC_VERSION = grpc.__version__
@@ -37,12 +37,12 @@ class MoneyTransactonStub(object):
         self.deposit = channel.unary_unary(
                 '/user_profile.MoneyTransacton/deposit',
                 request_serializer=money__transcation__pb2.UserDepositRequest.SerializeToString,
-                response_deserializer=money__transcation__pb2.StatusResponse.FromString,
+                response_deserializer=money__transcation__pb2.TransactionResponse.FromString,
                 _registered_method=True)
         self.withdraw = channel.unary_unary(
                 '/user_profile.MoneyTransacton/withdraw',
                 request_serializer=money__transcation__pb2.UserDepositRequest.SerializeToString,
-                response_deserializer=money__transcation__pb2.StatusResponse.FromString,
+                response_deserializer=money__transcation__pb2.TransactionResponse.FromString,
                 _registered_method=True)
 
 
@@ -67,12 +67,12 @@ def add_MoneyTransactonServicer_to_server(servicer, server):
             'deposit': grpc.unary_unary_rpc_method_handler(
                     servicer.deposit,
                     request_deserializer=money__transcation__pb2.UserDepositRequest.FromString,
-                    response_serializer=money__transcation__pb2.StatusResponse.SerializeToString,
+                    response_serializer=money__transcation__pb2.TransactionResponse.SerializeToString,
             ),
             'withdraw': grpc.unary_unary_rpc_method_handler(
                     servicer.withdraw,
                     request_deserializer=money__transcation__pb2.UserDepositRequest.FromString,
-                    response_serializer=money__transcation__pb2.StatusResponse.SerializeToString,
+                    response_serializer=money__transcation__pb2.TransactionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -101,7 +101,7 @@ class MoneyTransacton(object):
             target,
             '/user_profile.MoneyTransacton/deposit',
             money__transcation__pb2.UserDepositRequest.SerializeToString,
-            money__transcation__pb2.StatusResponse.FromString,
+            money__transcation__pb2.TransactionResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -128,7 +128,7 @@ class MoneyTransacton(object):
             target,
             '/user_profile.MoneyTransacton/withdraw',
             money__transcation__pb2.UserDepositRequest.SerializeToString,
-            money__transcation__pb2.StatusResponse.FromString,
+            money__transcation__pb2.TransactionResponse.FromString,
             options,
             channel_credentials,
             insecure,
