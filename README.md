@@ -7,8 +7,9 @@ Fake online web casino for gRPC talk
 1. `envoy -c envoy.yaml` (прокси)
 2. `npm run dev`
 
-**Для сервисов:**
-- `PYTHONPATH=. python3 service_X/server.py`
+**Для python-сервисов:**
+1. `cd src/`
+2. `PYTHONPATH=. python3 service_X/server.py`
 
 ## Структура проекта
 
