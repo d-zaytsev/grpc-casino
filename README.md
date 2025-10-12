@@ -13,6 +13,8 @@ Fake online web casino for gRPC talk
 
 ## Структура проекта
 
+<img width="2419" height="2203" alt="grpc casino" src="https://github.com/user-attachments/assets/22695c05-7d25-45e3-b116-a366c310dfdf" />
+
 ### `/protos`
 
 Все сервисы взаимодействуют по `gRPC`. В этом каталоге находятся все `.proto` файлы для них.
