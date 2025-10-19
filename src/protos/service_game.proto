@@ -1,0 +1,22 @@
+// ########################################################################
+// # Сервис отвечает за логику игры и отправление данных на фронтенд      #
+// ########################################################################
+
+
+syntax = "proto3";
+package service_game;
+option go_package = "github.com/d-zaytsev/grpc-casino/gen/go/service_game/protos;service_game";
+
+message SpinRequest {
+  string user_uuid = 1;
+}
+
+message SpinResult {
+  repeated int32 symbols = 1;
+  bool is_final = 2;
+}
+
+service GameService {
+  rpc GetResults(SpinRequest) returns (stream SpinResult) {}
+}
+

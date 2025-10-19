@@ -274,7 +274,7 @@ proto.user_profile.UserProfileInfo.toObject = function(includeInstance, msg) {
     name: jspb.Message.getFieldWithDefault(msg, 1, ""),
     passwordHash: jspb.Message.getFieldWithDefault(msg, 2, ""),
     balance: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
-    userUuid: jspb.Message.getFieldWithDefault(msg, 4, "")
+    uuid: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -325,7 +325,7 @@ proto.user_profile.UserProfileInfo.deserializeBinaryFromReader = function(msg, r
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setUserUuid(value);
+      msg.setUuid(value);
       break;
     default:
       reader.skipField();
@@ -377,7 +377,7 @@ proto.user_profile.UserProfileInfo.serializeBinaryToWriter = function(message, w
       f
     );
   }
-  f = message.getUserUuid();
+  f = message.getUuid();
   if (f.length > 0) {
     writer.writeString(
       4,
@@ -442,10 +442,10 @@ proto.user_profile.UserProfileInfo.prototype.setBalance = function(value) {
 
 
 /**
- * optional string user_uuid = 4;
+ * optional string uuid = 4;
  * @return {string}
  */
-proto.user_profile.UserProfileInfo.prototype.getUserUuid = function() {
+proto.user_profile.UserProfileInfo.prototype.getUuid = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -454,7 +454,7 @@ proto.user_profile.UserProfileInfo.prototype.getUserUuid = function() {
  * @param {string} value
  * @return {!proto.user_profile.UserProfileInfo} returns this
  */
-proto.user_profile.UserProfileInfo.prototype.setUserUuid = function(value) {
+proto.user_profile.UserProfileInfo.prototype.setUuid = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
 };
 

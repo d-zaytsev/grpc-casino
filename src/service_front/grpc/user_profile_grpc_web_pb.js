@@ -8,7 +8,7 @@
 // versions:
 // 	protoc-gen-grpc-web v2.0.2
 // 	protoc              v3.13.0
-// source: user_profile.proto
+// source: src/protos/user_profile.proto
 
 
 /* eslint-disable */
@@ -33,7 +33,7 @@ proto.user_profile = require('./user_profile_pb.js');
 proto.user_profile.UserProfileClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options.format = 'binary';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -59,7 +59,7 @@ proto.user_profile.UserProfileClient =
 proto.user_profile.UserProfilePromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options.format = 'binary';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client

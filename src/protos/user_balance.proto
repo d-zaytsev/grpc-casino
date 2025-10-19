@@ -3,6 +3,8 @@
 // #####################################################
 syntax = "proto3";
 package user_balance;
+option go_package = "github.com/d-zaytsev/grpc-casino/gen/go/user_balance/protos;user_balance";
+
 
 message User {
     string user_uuid = 1; // нумерованные теги
