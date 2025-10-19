@@ -54,3 +54,6 @@ Golang-сервис, имитирующий работу слот-машины: 
 ## Скрины работы приложения
 
 <img width="1000" height="600" alt="image" src="https://github.com/user-attachments/assets/2c31bfc9-5086-47bb-a131-942fb47d52eb" />
+
+<img width="3843" height="1983" alt="Screenshot From 2025-10-20 00-42-50" src="https://github.com/user-attachments/assets/7be4892f-be9e-4b92-a259-d5b28391b944" />
+
