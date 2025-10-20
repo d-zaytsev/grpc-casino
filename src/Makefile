@@ -1,6 +1,3 @@
-# Makefile для управления микросервисами
-
-# Определяем PID файлы для каждого сервиса
 PID_DIR := .pids
 ENVOY_PID := $(PID_DIR)/envoy.pid
 TRANSACTIONS_PID := $(PID_DIR)/transactions.pid
@@ -9,12 +6,10 @@ BALANCE_PID := $(PID_DIR)/balance.pid
 GAME_PID := $(PID_DIR)/game.pid
 FRONT_PID := $(PID_DIR)/front.pid
 
-# Виртуальное окружение
 VENV := .venv
 PYTHON := $(VENV)/bin/python3
 PIP := $(VENV)/bin/pip
 
-# Команды запуска сервисов
 ENVOY_CMD := envoy -c service_front/envoy.yaml
 TRANSACTIONS_CMD := PYTHONPATH=. $(PYTHON) service_transaction/server.py
 PROFILE_CMD := PYTHONPATH=. $(PYTHON) service_profile/server.py
@@ -24,13 +19,10 @@ FRONT_CMD := cd service_front/ && npm run dev
 
 .PHONY: all start stop restart clean status logs help setup install install-go install-node
 
-# Основная цель - показать справку
 all: help
 
-# Настройка окружения
 setup: $(VENV) install npm
 
-# Создание виртуального окружения Python
 $(VENV):
 	@echo "Создание виртуального окружения Python..."
 	python3 -m venv $(VENV)
@@ -41,33 +33,14 @@ npm:
 	npm install service_front/
 	@echo "Node.js зависимости установлены"
 
-# Установка Python зависимостей
 install: $(VENV)
 	@echo "Установка Python зависимостей..."
 	$(PIP) install grpcio grpcio-tools protobuf
 	@echo "Python зависимости установлены"
 
-# Установка Go (информационная цель)
-install-go:
-	@echo "Для установки Go посетите: https://golang.org/dl/"
-	@echo "Или используйте пакетный менеджер вашей ОС:"
-	@echo "  Ubuntu/Debian: sudo apt install golang-go"
-	@echo "  CentOS/RHEL: sudo yum install golang"
-	@echo "  macOS: brew install go"
-
-# Установка Node.js (информационная цель)
-install-node:
-	@echo "Для установки Node.js посетите: https://nodejs.org/"
-	@echo "Или используйте пакетный менеджер вашей ОС:"
-	@echo "  Ubuntu/Debian: sudo apt install nodejs npm"
-	@echo "  CentOS/RHEL: sudo yum install nodejs npm"
-	@echo "  macOS: brew install node"
-
-# Создаем директорию для PID файлов
 $(PID_DIR):
 	@mkdir -p $(PID_DIR)
 
-# Запуск всех сервисов
 start: $(PID_DIR)
 	@echo "Запуск всех сервисов..."
 	@$(MAKE) start-envoy
@@ -79,7 +52,6 @@ start: $(PID_DIR)
 	@echo "Все сервисы запущены!"
 	@$(MAKE) status
 
-# Остановка всех сервисов
 stop:
 	@echo "Остановка всех сервисов..."
 	@-$(MAKE) stop-envoy
@@ -90,10 +62,8 @@ stop:
 	@-$(MAKE) stop-front
 	@echo "Все сервисы остановлены"
 
-# Перезапуск всех сервисов
 restart: stop start
 
-# Запуск отдельных сервисов
 start-envoy: $(PID_DIR)
 	@if [ -f $(ENVOY_PID) ] && kill -0 `cat $(ENVOY_PID)` 2>/dev/null; then \
 		echo "Envoy уже запущен (PID: `cat $(ENVOY_PID)`)"; \
@@ -154,7 +124,6 @@ start-front: $(PID_DIR)
 		echo "Frontend запущен (PID: $$!)"; \
 	fi
 
-# Остановка отдельных сервисов
 stop-envoy:
 	@if [ -f $(ENVOY_PID) ]; then \
 		pid=$$(cat $(ENVOY_PID)); \
@@ -239,7 +208,6 @@ stop-front:
 		echo "Frontend не запущен"; \
 	fi
 
-# Показать статус всех сервисов
 status:
 	@echo "=== Статус сервисов ==="
 	@for service in envoy transactions profile balance game front; do \
@@ -247,23 +215,15 @@ status:
 		if [ -f "$$pid_file" ]; then \
 			pid=$$(cat $$pid_file); \
 			if kill -0 $$pid 2>/dev/null; then \
-				echo "✅ $$service: запущен (PID: $$pid)"; \
+				echo "$$service: запущен (PID: $$pid)"; \
 			else \
-				echo "❌ $$service: PID файл есть, но процесс не запущен"; \
+				echo "$$service: PID файл есть, но процесс не запущен"; \
 			fi; \
 		else \
-			echo "❌ $$service: не запущен"; \
+			echo "$$service: не запущен"; \
 		fi; \
 	done
 
-# Активация виртуального окружения (информация)
-activate:
-	@echo "Для активации виртуального окружения выполните:"
-	@echo "  source $(VENV)/bin/activate"
-	@echo "Или:"
-	@echo "  . $(VENV)/bin/activate"
-
-# Очистка PID файлов и виртуального окружения
 clean:
 	@echo "Очистка PID файлов..."
 	@-rm -rf $(PID_DIR)
@@ -274,16 +234,12 @@ clean-all: clean
 	@-rm -rf $(VENV)
 	@echo "Виртуальное окружение удалено"
 
-# Справка
 help:
 	@echo "Доступные команды:"
 	@echo ""
 	@echo "  Настройка окружения:"
 	@echo "    make setup        - Создать виртуальное окружение и установить зависимости"
 	@echo "    make install      - Установить Python зависимости"
-	@echo "    make install-go   - Показать инструкцию по установке Go"
-	@echo "    make install-node - Показать инструкцию по установке Node.js"
-	@echo "    make activate     - Показать команду для активации виртуального окружения"
 	@echo ""
 	@echo "  Управление сервисами:"
 	@echo "    make start        - Запустить все сервисы"
